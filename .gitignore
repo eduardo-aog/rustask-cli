@@ -1,0 +1,36 @@
+### Rust ###
+/target
+
+# Archivos de respaldo que genera `rustfmt`.
+**/*.rs.bk
+
+# Buils de depuración
+*.pdb
+
+### Cargo.lock ###
+# Cargo.lock
+
+# .envs
+.env
+*.env
+.env.*
+
+# Archivos de configuración local.
+*.local
+
+# Configuraciones de IDEs más comunes.
+.vscode/
+.idea/
+*.iml
+
+# OS.
+.DS_Store
+Thumbs.db
+
+### Archivos temporales y de respaldo ###
+*.log
+*.tmp
+*~
+*.bak
+\#*#
+.#*
