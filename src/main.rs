@@ -4,13 +4,15 @@ mod enums;
 use std::io;
 use crate::helpers::helpers::get_date_time;
 use enums::task::Task;
+use enums::task_manager::TaskManager;
 
 fn main() {
     let mut id = 0;
     println!("RusTask Manager");
     println!("Bienvenido");
+    let mut manager: TaskManager = TaskManager::new();
     loop {
-        println!("¿Que quieres hacer? (0: salir, 1: crear tarea)");
+        println!("¿Que quieres hacer? (0: salir, 1: crear tarea, 2: eliminar tarea)");
         let mut opt: String = String::new();
         io::stdin()
             .read_line(&mut opt)
@@ -42,8 +44,24 @@ fn main() {
             let date: String = get_date_time();
 
             let task: Task = Task::new_task(id, name, status, &date, &date);
-     
-            task.show_task();                  
+            manager.add_task(task);        
+
+        } else if opt == 2 {
+            println!("Indique el ID de la tarea que quires eliminar: ");
+            let mut id: String = String::new();
+
+            io::stdin()
+                .read_line(&mut id)
+                .expect("Error al leer la linea");
+
+            let id: i32 = match id.trim().parse() {
+                    Ok(num) => num,
+                    Err(_) => {
+                        println!("Indique un número válido");
+                        continue;
+                    }
+                };
+            manager.remove_task(id);
         } else {
             println!("Adios");
             break;
