@@ -12,19 +12,21 @@ fn main() {
     println!("Bienvenido");
     let mut manager: TaskManager = TaskManager::new();
     loop {
-        println!("¿Que quieres hacer? (0: salir, 1: crear tarea, 2: eliminar tarea)");
+        // init
+        println!("¿Que quieres hacer? (0: salir, 1: crear tarea, 2: eliminar tarea, 3: mostrar tareas, 4: modificación de tareas)");
         let mut opt: String = String::new();
         io::stdin()
             .read_line(&mut opt)
             .expect("Error al leer la linea");
 
-        let opt: i32 = match opt.trim().parse() {
+        let opt: i8 = match opt.trim().parse() {
             Ok(num) => num,
             Err(_) => {
                 println!("Error: por favor ingrese un numero valido");
                 continue;
             }
         };
+        
         if opt == 1 {
             id = id + 1;
             println!("Indique el nombre de la tarea");
@@ -62,6 +64,11 @@ fn main() {
                     }
                 };
             manager.remove_task(id);
+
+        } else if opt == 3 {
+            manager.show_all_tasks();
+        } else if opt == 4 {
+            
         } else {
             println!("Adios");
             break;
