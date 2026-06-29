@@ -19,14 +19,14 @@ impl Task {
     }
 
     // Actualización y cambios en tareas
-    pub fn change_task_name(&mut self, new_name: String, update: &str) {
+    pub fn change_task_name(&mut self, new_name: String, update: String) {
         self.name = new_name;
-        self.updated_at = update.to_string();
+        self.updated_at = update;
     }
 
-    pub fn change_task_status(&mut self, new_status: String, update: &str) {
+    pub fn change_task_status(&mut self, new_status: String, update: String) {
         self.status = new_status;
-        self.updated_at = update.to_string();
+        self.updated_at = update;
     }
 
     // Mostrar tareas
@@ -34,8 +34,8 @@ impl Task {
         println!("[{}] - {} | {}", self.id, self.name, self.status)
     }
 
-    pub fn show_task_with_date(&self) {
-        println!("[{}] - {} | {} \n(creado: {}, modificado {})", self.id, self.name, self.status, self.created_at, self.updated_at)
+    pub fn show_task_with_metadata(&self) {
+        println!("[{}] - {} | {} (creado: {}, modificado {})\n", self.id, self.name, self.status, self.created_at, self.updated_at)
     }
 
 }
