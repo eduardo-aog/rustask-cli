@@ -31,11 +31,11 @@ impl Task {
 
     // Mostrar tareas
     pub fn show_task(&self) {
-        println!("[{}] - {} | {}", self.id, self.name, self.status)
+        println!("[{}] - {} \n | {}", self.id, self.name, self.status)
     }
 
     pub fn show_task_with_metadata(&self) {
-        println!("[{}] - {} | {} (creado: {}, modificado {})\n", self.id, self.name, self.status, self.created_at, self.updated_at)
+        println!("[{}] - {} \n | {} \n(creado: {}, modificado {})", self.id, self.name, self.status, self.created_at, self.updated_at)
     }
 
 }

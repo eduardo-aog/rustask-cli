@@ -2,16 +2,24 @@ use crate::Task;
 const TASK_NULL: usize = usize::MAX;
 pub struct TaskManager {
     task_manager: Vec<Task>,
-    size: usize
+    size: i32,
+    pub next_id: i32,
 }
 
 impl TaskManager {
-
     pub fn new() -> TaskManager {
         TaskManager {
             task_manager: Vec::new(),
-            size: 0
+            size: 0,
+            next_id: 1
         }
+    }
+
+    // Genera el ID para colocarselo a la tarea y sumar al siguiente
+    pub fn generate_id(&mut self) -> i32 {
+        let id: i32 = self.next_id;
+        self.next_id += 1;
+        id
     }
 
     // Añadir tareas
@@ -88,6 +96,11 @@ impl TaskManager {
             }
         };
         position
+    }
+
+    // Mostrar donde se encuentra el next_id
+    pub fn show_next_id(&self) -> i32 {
+        self.next_id
     }
 
 }
