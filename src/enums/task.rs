@@ -1,5 +1,6 @@
+const VALID_STATUSES: [&str; 3] = ["todo", "doing", "done"];
 pub struct Task {
-    pub id: i32,
+    id: i32,
     name: String,
     status: String,
     created_at: String,
@@ -15,7 +16,7 @@ impl Task {
             status,
             created_at: created_at.to_string(),
             updated_at: updated_at.to_string(),
-        }
+            }
     }
 
     // Actualización y cambios en tareas
@@ -36,6 +37,28 @@ impl Task {
 
     pub fn show_task_with_metadata(&self) {
         println!("[{}] - {} \n | {} \n(creado: {}, modificado {})", self.id, self.name, self.status, self.created_at, self.updated_at)
+    }
+
+    // Getters
+    pub fn get_id(&self) -> i32 {
+        self.id
+    }
+    
+    pub fn get_status(&self) -> String {
+        self.status.to_string()
+    }
+
+
+    // Validaciones propias
+    pub fn validate_status(text: String) -> Result<String, String> {
+        let cleaned: String = text.trim().to_lowercase();
+
+        if VALID_STATUSES.contains(&cleaned.as_str()) {
+            Ok(cleaned)
+        } else {
+            Err(format!("Invalid status \"{}\"\nValid statuses are:\n  todo\n  doing\n  done", text))
+        }
+
     }
 
 }

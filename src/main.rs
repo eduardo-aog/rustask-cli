@@ -12,7 +12,7 @@ fn main() {
     loop {
         // init
         println!("");
-        let opt: String = input("¿Que quieres hacer? \n0: salir \n1: crear tarea \n2: eliminar tarea \n3: mostrar tareas \n4: mostrar tarea con sus metadatos completos \n5: editar nombre \n6: editar estatus");
+        let opt: String = input("¿Que quieres hacer? \n0: salir \n1: crear tarea \n2: eliminar tarea \n3: mostrar tareas \n4: mostrar tarea con sus metadatos completos \n5: editar nombre \n6: editar estatus\n7: mostrar to-do\n8: mostrar doing\n9: mostrar done\n10: contar todas las tareas");
         let opt: i8 = match opt.trim().parse() {
             Ok(num) => num,
             Err(_) => {
@@ -26,11 +26,18 @@ fn main() {
             break;
         } else if opt == 1 {
             let name: String = input("Indique el nombre de la tarea:");
-            let status: String = input("Indique el estatus de la tarea:");
+            let raw_status = input("Indique el estatus de la tarea:");
             let date: String = get_date_time();
 
-            let task: Task = Task::new_task(manager.generate_id(), name, status, &date, &date);
-            manager.add_task(task);
+            let status: String = match Task::validate_status(raw_status) {
+                Ok(valid_status) => valid_status,
+                Err(msg) => {
+                    println!("{}", msg);
+                    continue;
+                }
+            };
+
+            manager.add_task(name, status, &date, &date);
 
         } else if opt == 2 {
             let id: String = input("Indique el ID de la tarea que quires eliminar: ");
@@ -76,13 +83,31 @@ fn main() {
                     }
                 };
 
-            let new_status: String = input(&format!("Indique el nuevo estatus de la tarea {}:", id));
+            let raw_status: String = input(&format!("Indique el nuevo estatus de la tarea {}:", id));
 
+            let status: String = match Task::validate_status(raw_status) {
+                Ok(valid_status) => valid_status,
+                Err(msg) => {
+                    println!("{}", msg);
+                    continue;
+                }
+            };
             let update: String = get_date_time();
             
-            manager.update_task_status(id, new_status.trim().to_string(), update);       
+            manager.update_task_status(id, status.trim().to_string(), update);       
     
-        } 
+        } else if opt == 7 {
+            manager.show_todo();
+        } else if opt == 8 {
+            manager.show_doing();
+        } else if opt == 9 {
+            manager.show_done();
+        } else if opt == 10 {
+            manager.print_summary();
+        } else { 
+            println!("Por favor, ingrese una opción válida");
+            continue;
+        }
     }
 
 }

@@ -3,7 +3,7 @@ const TASK_NULL: usize = usize::MAX;
 pub struct TaskManager {
     task_manager: Vec<Task>,
     size: i32,
-    pub next_id: i32,
+    next_id: i32,
 }
 
 impl TaskManager {
@@ -23,7 +23,8 @@ impl TaskManager {
     }
 
     // Añadir tareas
-    pub fn add_task(&mut self, task: Task) {
+    pub fn add_task(&mut self, name: String, status: String, created_at: &str, updated_at: &str,) {
+        let task: Task = Task::new_task(self.generate_id(), name, status, created_at, updated_at);
         self.task_manager.push(task);
         self.size = self.size+1;
         println!("Tarea añadida exitosamente")
@@ -38,6 +39,58 @@ impl TaskManager {
         for element in &self.task_manager {
             element.show_task();
         }
+    }
+
+    pub fn show_todo(&self) {
+        if self.size == 0 {
+            println!("El administrador está vacío, por favor, agregue una tarea");
+            return
+        }
+        for element in &self.task_manager {
+            if element.get_status() == "todo" {
+                element.show_task();
+            }
+        }
+    }
+
+    pub fn show_doing(&self) {
+        if self.size == 0 {
+            println!("El administrador está vacío, por favor, agregue una tarea");
+            return
+        }
+        for element in &self.task_manager {
+            if element.get_status() == "doing" {
+                element.show_task();
+            }
+        }
+    }
+
+    pub fn show_done(&self) {
+        if self.size == 0 {
+            println!("El administrador está vacío, por favor, agregue una tarea");
+            return
+        }
+        for element in &self.task_manager {
+            if element.get_status() == "done" {
+                element.show_task();
+            }
+        }
+    }
+
+    pub fn count_by_status(&self, status: &str) -> usize {
+        self.task_manager
+            .iter()
+            .filter(|task| task.get_status() == status)
+            .count()
+    }
+
+    pub fn print_summary(&self) {
+        println!("{} tasks", self.size);
+        println!("{} todo, {} doing, {} done",
+                self.count_by_status("todo"),
+                self.count_by_status("doing"),
+                self.count_by_status("done"),
+        )
     }
 
     pub fn show_all_tasks_with_metadata(&self) {
@@ -88,7 +141,7 @@ impl TaskManager {
     // Encontrar el ID de una tarea con su índice en el array
     fn get_index_on_vector(&self, task_id: i32) -> usize {
         let position = 
-        match self.task_manager.iter().position(|t| t.id == task_id) {
+        match self.task_manager.iter().position(|t| t.get_id() == task_id) {
             Some(pos) => pos,
             None => {
                 println!("No se encontró una tarea con el id {task_id}");
@@ -98,9 +151,6 @@ impl TaskManager {
         position
     }
 
-    // Mostrar donde se encuentra el next_id
-    pub fn show_next_id(&self) -> i32 {
-        self.next_id
-    }
+
 
 }

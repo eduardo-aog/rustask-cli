@@ -1,4 +1,4 @@
-use std::io::{self, Read};
+use std::io;
 use chrono::Local;
 
 pub fn get_date_time() -> String {
