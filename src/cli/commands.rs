@@ -2,9 +2,9 @@ use clap:: {
     Parser,
     Subcommand,
     Args
-    };
+};
 
-/// Simple program to greet a person
+/// Initialization of 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Arguments {

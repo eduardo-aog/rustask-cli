@@ -1,9 +1,9 @@
-mod helpers;
+mod cli;
 mod enums;
-use crate::helpers::helpers::get_date_time;
-use crate::helpers::helpers::input;
-use enums::task::Task;
-use enums::task_manager::TaskManager;
+mod helpers;
+use crate::helpers::helpers::{ get_date_time, input };
+use enums::{ Task, TaskManager };
+use cli::commands;
 
 fn main() {
     println!("RusTask Manager");
