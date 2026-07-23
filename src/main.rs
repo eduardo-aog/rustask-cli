@@ -12,7 +12,7 @@ fn main() {
     loop {
         // init
         println!("");
-        let opt: String = input("¿Que quieres hacer? \n0: salir \n1: crear tarea \n2: eliminar tarea \n3: mostrar tareas \n4: mostrar tarea con sus metadatos completos \n5: editar nombre \n6: editar estatus\n7: mostrar to-do\n8: mostrar doing\n9: mostrar done\n10: contar todas las tareas");
+        let opt: String = input("¿Que quieres hacer? \n0: salir \n1: crear tarea \n2: eliminar tarea \n3: mostrar tareas \n4: mostrar tarea con sus metadatos completos \n5: editar nombre \n6: editar estatus\n7: mostrar to-do\n8: mostrar doing\n9: mostrar done\n10: contar todas las tareas\n11: mostrar tarea por ID");
         let opt: i8 = match opt.trim().parse() {
             Ok(num) => num,
             Err(_) => {
@@ -104,6 +104,16 @@ fn main() {
             manager.show_done();
         } else if opt == 10 {
             manager.print_summary();
+        } else if opt == 11 {
+            let id: String = input("Indique el ID de la tarea a mostrar:");
+            let id: i32 = match id.trim().parse() {
+                Ok(n) => n,
+                Err(_) => {
+                    println!("Por favor, ingrese una opción válida");
+                    continue;
+                }
+            };
+            manager.show_by_id(id);
         } else { 
             println!("Por favor, ingrese una opción válida");
             continue;
