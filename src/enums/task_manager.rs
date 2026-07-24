@@ -77,6 +77,14 @@ impl TaskManager {
         }
     }
 
+    pub fn show_by_id(&self, task_id: i32) {
+        let position: usize = self.get_index_on_vector(task_id);
+        if position == TASK_NULL {
+            return
+        }
+        self.task_manager[position].show_task();
+    }
+
     pub fn count_by_status(&self, status: &str) -> usize {
         self.task_manager
             .iter()
