@@ -1,4 +1,4 @@
-const VALID_STATUSES: [&str; 3] = ["todo", "doing", "done"];
+// const VALID_STATUSES: [&str; 3] = ["todo", "doing", "done"];
 pub struct Task {
     id: i32,
     name: String,
@@ -9,14 +9,20 @@ pub struct Task {
 
 impl Task {
     // Creación de tareas
-    pub fn new_task(id: i32, name: String, status: String, created_at: &str, updated_at: &str,) -> Task {
+    pub fn new_task(
+        id: i32,
+        name: String,
+        status: String,
+        created_at: &str,
+        updated_at: &str,
+    ) -> Task {
         Task {
             id,
             name,
             status,
             created_at: created_at.to_string(),
             updated_at: updated_at.to_string(),
-            }
+        }
     }
 
     // Actualización y cambios en tareas
@@ -36,29 +42,29 @@ impl Task {
     }
 
     pub fn show_task_with_metadata(&self) {
-        println!("[{}] - {} \n | {} \n(creado: {}, modificado {})", self.id, self.name, self.status, self.created_at, self.updated_at)
+        println!(
+            "[{}] - {} \n | {} \n(creado: {}, modificado {})",
+            self.id, self.name, self.status, self.created_at, self.updated_at
+        )
     }
 
     // Getters
     pub fn get_id(&self) -> i32 {
         self.id
     }
-    
+
     pub fn get_status(&self) -> String {
         self.status.to_string()
     }
 
-
     // Validaciones propias
-    pub fn validate_status(text: String) -> Result<String, String> {
-        let cleaned: String = text.trim().to_lowercase();
-
-        if VALID_STATUSES.contains(&cleaned.as_str()) {
-            Ok(cleaned)
+    pub fn validate_non_empty(val: &str) -> Result<String, String> {
+        let trimmed = val.trim();
+        if trimmed.is_empty() {
+            Err("El nombre no puede estar vacío".to_string())
         } else {
-            Err(format!("Invalid status \"{}\"\nValid statuses are:\n  todo\n  doing\n  done", text))
+            // Retorna el texto limpio sin espacios sobrantes en los extremos
+            Ok(trimmed.to_string())
         }
-
     }
-
 }

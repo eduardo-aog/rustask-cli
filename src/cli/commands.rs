@@ -1,14 +1,28 @@
-use clap:: { 
-    Parser,
-    Subcommand,
-    Args
-};
+use crate::enums::task::Task;
+use clap::ValueEnum;
+use clap::{Args, Parser, Subcommand};
 
-/// Initialization of 
+#[derive(Debug, Clone, ValueEnum)]
+pub enum TaskStatus {
+    Todo,
+    Doing,
+    Done,
+}
+
+impl TaskStatus {
+    pub fn cast_to_string(&self) -> String {
+        match self {
+            TaskStatus::Todo => "todo".to_string(),
+            TaskStatus::Doing => "doing".to_string(),
+            TaskStatus::Done => "done".to_string(),
+        }
+    }
+}
+
+/// Initialization of
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 pub struct Arguments {
-
     #[clap(subcommand)]
     pub entity_type: Action,
 }
@@ -23,18 +37,17 @@ pub enum Action {
     Edit(EditTask),
     /// Show tasks
     Show(ShowTask),
-    
 }
 
 /* CREAR */
 #[derive(Debug, Args)]
 pub struct CreateTask {
-    /// Task title 
+    /// Task title
+    #[arg(value_parser = Task::validate_non_empty)]
     pub task_name: String,
 
     /// Task status
-    pub task_status: String,
-
+    pub task_status: TaskStatus,
 }
 
 /* ELIMINAR */
@@ -48,7 +61,7 @@ pub struct DeleteTask {
 #[derive(Debug, Args)]
 pub struct EditTask {
     #[clap(subcommand)]
-    pub command: EditSubcommand
+    pub command: EditSubcommand,
 }
 
 #[derive(Debug, Subcommand)]
@@ -64,6 +77,7 @@ pub struct EditName {
     /// Task ID to edit
     pub task_id: i32,
     /// Task new name
+    #[arg(value_parser = Task::validate_non_empty)]
     pub new_name: String,
 }
 
@@ -72,7 +86,7 @@ pub struct EditStatus {
     /// Task ID to edit
     pub task_id: i32,
     /// Task new status
-    pub new_status: String,
+    pub new_status: TaskStatus,
 }
 
 /* IMPRESIÓN */
@@ -85,21 +99,18 @@ pub struct ShowTask {
     #[clap(long, short = 'c')]
     pub complete: bool,
 
-    /* POR HACER: implementación de filtro (dependiendo del status que diga el usuario)  
     #[clap(subcommand)]
-    pub filter: Option<ShowFilter>,
-    */
+    pub filter: Option<FilterSubcommand>,
 }
 
-/*
 #[derive(Debug, Subcommand)]
-pub enum ShowFilter {
-    /// Show tasks with a specific status
-    Status(ShowByStatus),
+pub enum FilterSubcommand {
+    /// Show "To-do" tasks
+    Todo,
+    /// Show "Doing" tasks
+    Doing,
+    /// Show "Done" tasks
+    Done,
+    /// Show summary of tasks
+    Summary,
 }
-
-#[derive(Debug, Args)]
-pub struct ShowByStatus {
-    pub status: String,
-}
-*/

@@ -289,7 +289,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustask-cli"
+name = "rustask"
 version = "0.1.0"
 dependencies = [
  "chrono",

@@ -1,59 +1,67 @@
 mod cli;
 mod enums;
 mod helpers;
-mod services;
-use crate::helpers::helpers::{ validate_option };
-use enums::{ task::Task, task_manager::TaskManager };
-use services::data_input;
+use crate::cli::commands::EditSubcommand;
+use clap::Parser;
+use cli::commands;
+use cli::commands::{Action, FilterSubcommand};
+use enums::task_manager::TaskManager;
+use helpers::helpers::get_date_time;
 
 fn main() {
-    println!("RusTask Manager");
-    println!("Bienvenido");
     let mut manager: TaskManager = TaskManager::new();
-    loop {
-        println!("");
-        let opt: i8 = validate_option();
-        if opt == 0 {
-            println!("Adios");
-            break;
 
-        } else if opt == 1 {
-            data_input::input_add(&mut manager);
+    let args = commands::Arguments::parse();
 
-        } else if opt == 2 {
-            data_input::input_remove(&mut manager);
+    match args.entity_type {
+        Action::Create(task) => {
+            let date: String = get_date_time();
+            manager.add_task(
+                task.task_name,
+                task.task_status.cast_to_string(),
+                &date,
+                &date,
+            );
+        }
+        Action::Delete(task) => {
+            manager.remove_task(task.task_id);
+        }
 
-        } else if opt == 3 {
-            manager.show_all_tasks();
+        Action::Edit(edit) => match edit.command {
+            EditSubcommand::Name(task) => {
+                let date: String = get_date_time();
+                manager.update_task_name(task.task_id, task.new_name, date);
+            }
 
-        } else if opt == 4 {
-            manager.show_all_tasks_with_metadata();
+            EditSubcommand::Status(task) => {
+                let date: String = get_date_time();
+                manager.update_task_status(task.task_id, task.new_status.cast_to_string(), date);
+            }
+        },
 
-        } else if opt == 5 {
-            data_input::input_update_name(&mut manager);
-
-        } else if opt == 6 {
-            data_input::input_update_status(&mut manager);
-
-        } else if opt == 7 {
-            manager.show_todo();
-
-        } else if opt == 8 {
-            manager.show_doing();
-
-        } else if opt == 9 {
-            manager.show_done();
-
-        } else if opt == 10 {
-            manager.print_summary();
-
-        } else if opt == 11 {
-            data_input::input_show_by_id(&mut manager);
-
-        } else { 
-            println!("Por favor, ingrese una opción válida");
-            continue;
+        Action::Show(task) => {
+            if let Some(id) = task.task_id {
+                manager.show_by_id(id);
+            } else if let Some(filter) = task.filter {
+                match filter {
+                    FilterSubcommand::Todo => {
+                        manager.show_todo();
+                    }
+                    FilterSubcommand::Doing => {
+                        manager.show_doing();
+                    }
+                    FilterSubcommand::Done => {
+                        manager.show_done();
+                    }
+                    FilterSubcommand::Summary => {
+                        manager.print_summary();
+                    }
+                }
+            } else if task.complete {
+                manager.show_all_tasks_with_metadata();
+            } else {
+                manager.show_all_tasks();
+            }
         }
     }
-
 }
