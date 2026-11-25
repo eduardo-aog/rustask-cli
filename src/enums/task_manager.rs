@@ -1,5 +1,8 @@
 const TASK_NULL: usize = usize::MAX;
 use crate::enums::task::Task;
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct TaskManager {
     task_manager: Vec<Task>,
     size: i32,

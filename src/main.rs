@@ -1,14 +1,44 @@
 mod cli;
 mod enums;
 mod helpers;
-use crate::cli::commands::EditSubcommand;
 use clap::Parser;
-use cli::commands;
-use cli::commands::{Action, FilterSubcommand};
+use cli::commands::{self, Action, EditSubcommand, FilterSubcommand};
 use enums::task_manager::TaskManager;
 use helpers::helpers::get_date_time;
+use std::fs::{self, File};
+use std::path::Path;
 
 fn main() {
+    const PATH: &str = "tasks";
+    const FILE: &str = "tasks.json";
+
+    match fs::create_dir_all(PATH) {
+        Ok(x) => x,
+        Err(e) => {
+            eprintln!("Error al abrir la carpeta: {}", e);
+        }
+    };
+
+    let tareas = match File::open(Path::new(PATH).join(FILE)) {
+        Ok(x) => {
+            println!("Tareas cargadas...");
+            x
+        }
+        Err(_) => {
+            print!("Creando tareas...");
+            match File::create(Path::new(PATH).join(FILE)) {
+                Ok(archivo) => archivo,
+                Err(e) => {
+                    eprintln!("Error al crear el archivo: {}", e);
+                    return;
+                }
+            }
+        }
+    };
+
+    // Falta terminar de leer el archivo y
+    // conectarlo con los comandos de CLI
+
     let mut manager: TaskManager = TaskManager::new();
 
     let args = commands::Arguments::parse();

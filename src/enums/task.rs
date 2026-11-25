@@ -1,4 +1,6 @@
-// const VALID_STATUSES: [&str; 3] = ["todo", "doing", "done"];
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Task {
     id: i32,
     name: String,
