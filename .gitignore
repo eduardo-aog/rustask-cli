@@ -34,3 +34,9 @@ Thumbs.db
 *.bak
 \#*#
 .#*
+
+# Carpeta y archivo JSON de tareas
+tasks/
+tasks.json
+/tasks
+tasks

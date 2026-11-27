@@ -44,37 +44,13 @@ impl TaskManager {
         }
     }
 
-    pub fn show_todo(&self) {
+    pub fn show_by_status(&self, status: &str) {
         if self.size == 0 {
             println!("El administrador está vacío, por favor, agregue una tarea");
             return;
         }
         for element in &self.task_manager {
-            if element.get_status() == "todo" {
-                element.show_task();
-            }
-        }
-    }
-
-    pub fn show_doing(&self) {
-        if self.size == 0 {
-            println!("El administrador está vacío, por favor, agregue una tarea");
-            return;
-        }
-        for element in &self.task_manager {
-            if element.get_status() == "doing" {
-                element.show_task();
-            }
-        }
-    }
-
-    pub fn show_done(&self) {
-        if self.size == 0 {
-            println!("El administrador está vacío, por favor, agregue una tarea");
-            return;
-        }
-        for element in &self.task_manager {
-            if element.get_status() == "done" {
+            if element.get_status() == status {
                 element.show_task();
             }
         }
